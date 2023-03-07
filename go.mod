@@ -12,6 +12,7 @@ require (
 require (
 	github.com/elastic/elastic-transport-go/v8 v8.0.0-20211216131617-bbee439d559c // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/lib/pq v1.10.7
 	golang.org/x/net v0.4.0 // indirect
 	golang.org/x/sys v0.3.0 // indirect
 	golang.org/x/text v0.5.0 // indirect

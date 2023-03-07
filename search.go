@@ -79,6 +79,8 @@ func getProductQueryBody(productName string) bytes.Buffer {
 	var buf bytes.Buffer
 
 	query := map[string]any{
+		"from": 0,
+		"size": 120,
 		"query": map[string]any{
 			"match": map[string]any{
 				"product_name": productName,
@@ -92,6 +94,7 @@ func getProductQueryBody(productName string) bytes.Buffer {
 
 	return buf
 }
+
 func (srv *searchService) AddProduct(ctx context.Context, req *pb.AddProductRequest) (*empty.Empty, error) {
 	es := srv.esconn
 
