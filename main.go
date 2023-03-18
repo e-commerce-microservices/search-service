@@ -10,8 +10,8 @@ import (
 	"net"
 
 	"github.com/e-commerce-microservices/search-service/pb"
-	"github.com/elastic/go-elasticsearch/v8"
-	"github.com/elastic/go-elasticsearch/v8/esapi"
+	"github.com/elastic/go-elasticsearch/v7"
+	"github.com/elastic/go-elasticsearch/v7/esapi"
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
 
@@ -27,12 +27,16 @@ func init() {
 }
 
 func main() {
+	log.Println("connect es")
 	es := esconn()
+	fmt.Println("es: ", es)
 
+	log.Println("create grpc server")
 	grpcServer := grpc.NewServer()
 	searchService := searchService{
 		esconn: es,
 	}
+	log.Println("register grpc server")
 	pb.RegisterSearchServiceServer(grpcServer, &searchService)
 
 	listener, err := net.Listen("tcp", ":8080")
@@ -50,10 +54,14 @@ func main() {
 func esconn() *elasticsearch.Client {
 	// Initialize a client with the config
 	cfg := elasticsearch.Config{
-		Addresses: []string{"http://elasticsearch-master:9200"},
+		Addresses: []string{"http://host.minikube.internal:9200"},
+		// Addresses: []string{"http://localhost:9200"},
 	}
 
-	es, _ := elasticsearch.NewClient(cfg)
+	es, err := elasticsearch.NewClient(cfg)
+	if err != nil {
+		log.Println("es error: ", err)
+	}
 
 	// 1. Get cluster info
 	//
